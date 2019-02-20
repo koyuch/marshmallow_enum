@@ -33,7 +33,7 @@ class EnumField(Field):
     }
 
     def __init__(
-            self, enum, by_value=False, load_by=None, dump_by=None, error='', *args, **kwargs
+            self, enum=None, by_value=False, load_by=None, dump_by=None, error='', *args, **kwargs
     ):
         self.enum = enum
         self.by_value = by_value
@@ -98,7 +98,10 @@ class EnumField(Field):
             self.fail('must_be_string', input=value, name=value)
 
         try:
-            return getattr(self.enum, value)
+            if not self.enum:
+                return value
+            else:
+                return getattr(self.enum, value)
         except AttributeError:
             self.fail('by_name', input=value, name=value)
 
